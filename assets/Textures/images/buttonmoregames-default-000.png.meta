@@ -1,0 +1,38 @@
+{
+  "ver": "2.3.7",
+  "uuid": "b6564c2c-94cc-4fe0-a8c4-808715b1b42d",
+  "importer": "texture",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "width": 128,
+  "height": 128,
+  "platformSettings": {},
+  "subMetas": {
+    "buttonmoregames-default-000": {
+      "ver": "1.0.6",
+      "uuid": "2db71cc0-7c62-47a2-93b2-884dbff275f0",
+      "importer": "sprite-frame",
+      "rawTextureUuid": "b6564c2c-94cc-4fe0-a8c4-808715b1b42d",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 128,
+      "height": 128,
+      "rawWidth": 128,
+      "rawHeight": 128,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}
