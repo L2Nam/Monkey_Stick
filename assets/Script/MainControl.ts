@@ -11,13 +11,15 @@ export default class MainControl extends cc.Component {
     PlatformPrefab: cc.Prefab = null;
     Platform: cc.Node[] = [null, null]
     min_plat = -115
-    max_plat = 100
+    max_plat = 90
     min_scale_plat = 0.4
     max_scale_plat = 1.1
 
     monkey: cc.Sprite
     stick: cc.Sprite
     is_longer = false
+    is_ok = false
+    plat_number = 0;
 
     onLoad() {
         cc.Canvas.instance.node.on(cc.Node.EventType.TOUCH_START, this.onTouchStart, this);
@@ -60,10 +62,30 @@ export default class MainControl extends cc.Component {
             this.stick.node.angle -= 2.5
         }
 
-        this.scheduleOnce(() => {
+        if (this.stick.node.angle <= -88) {
             if (this.monkey.node.x <= -100 + this.stick.node.height * this.stick.node.scaleY)
-                this.monkey.node.x++
-        }, 2.5)
+                this.monkey.node.x += 2
+            else {
+                this.stick.node.active = false
+                this.stick.node.scaleY = 1
+                this.stick.node.angle = 0
+                this.plat_number = (this.plat_number + 1) % 2
+                this.stick.node.x = this.Platform[this.plat_number].scaleX * this.Platform[this.plat_number].width / 2 - 120
+                console.log(this.plat_number)
+            }
+        }
+        if (this.Platform[this.plat_number].x >= -115) {
+            for (let i = 0; i < this.Platform.length; i++) {
+                this.Platform[i].x -= 2.5
+            }
+            this.monkey.node.x -= 2.5
+            this.is_ok = true;
+        }
+        if (this.Platform[this.plat_number].x <= -115 && this.is_ok) {
+            this.Platform[(this.plat_number + 1) % 2].scaleX = Math.random() * (this.max_scale_plat - this.min_scale_plat) + this.min_scale_plat
+            this.Platform[(this.plat_number + 1) % 2].x = Math.random() * (this.max_plat - this.min_plat) + this.min_plat + this.Platform[this.plat_number].width / 2 + this.Platform[(this.plat_number + 1) % 2].scaleX * this.Platform[(this.plat_number + 1) % 2].width / 2
+            this.is_ok = false
+        }
     }
 
     onTouchStart(event: cc.Event.EventTouch) {
