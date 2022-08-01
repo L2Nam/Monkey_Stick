@@ -158,6 +158,7 @@ export default class MainControl extends cc.Component {
     }
 
     onTouchStart(event: cc.Event.EventTouch) {
+        console.log(this.monkey_die)
         if (!this.monkey_die) {
             this.is_longer = true
             this.stick.node.active = true
@@ -176,10 +177,10 @@ export default class MainControl extends cc.Component {
     }
 
     die() {
+        this.monkey_die = true
         this.scheduleOnce(() => {
             this.game_over.node.active = true
             this.gameStatus = GameStatus.Game_Over
-            this.monkey_die = true
             this.Best_score_img.node.active = true
             this.Best_score.node.active = true
             this.replay.node.active = true
