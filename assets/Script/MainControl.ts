@@ -25,6 +25,7 @@ export default class MainControl extends cc.Component {
     stick: cc.Sprite
     is_longer = false
     is_ok = false
+    is_move = false
     monkey_die = false
     plat_number = 0
     stick_length = 0
@@ -38,7 +39,8 @@ export default class MainControl extends cc.Component {
     Best_score_img: cc.Sprite
     replay: cc.Button
 
-    // anim_monkey_walk: cc.Animation
+    @property(cc.Animation)
+    animation: cc.Animation = null
 
     onLoad() {
         cc.Canvas.instance.node.on(cc.Node.EventType.TOUCH_START, this.onTouchStart, this);
@@ -65,7 +67,8 @@ export default class MainControl extends cc.Component {
         this.Platform[0].x = -115;
         this.Platform[1].scaleX = Math.random() * (this.max_scale_plat - this.min_scale_plat) + this.min_scale_plat
         this.Platform[1].x = Math.random() * (this.max_plat - this.min_plat) + this.min_plat + this.Platform[0].width / 2 + this.Platform[1].scaleX * this.Platform[1].width / 2
-        this.gameStatus = GameStatus.Game_Playing
+        this.gameStatus = GameStatus.Game_Playing;
+        this.animation.play("Monkey_idle")
     }
 
     update(dt) {
@@ -90,23 +93,31 @@ export default class MainControl extends cc.Component {
             this.cloud1.node.x = 250
         }
 
-        // click chuột làm dài gậy, nhả chuột gậy rơi xuống ngang
-        if (this.is_longer) {
+        // longer stick
+        if (this.is_longer && !this.is_move) {
             this.stick.node.scaleY += 0.4
         }
         else
             this.stick_length = this.stick.node.height * this.stick.node.scaleY
         if (this.stick.node.scaleY != 1 && !this.is_longer && this.stick.node.angle >= -88) {
             this.stick.node.angle -= 3
+            this.is_move = true
         }
 
 
-        // dưng rơi, check die
+        // move monkey, check die
         if (this.stick.node.angle <= -86) {
-            if (this.monkey.node.x <= -100 + this.stick_length)
+            if (this.animation.currentClip.name != "Monkey_walk") {
+                this.animation.play("Monkey_walk")
+            }
+            if (this.monkey.node.x <= -100 + this.stick_length) {
                 this.monkey.node.x += 3
+            }
+            this.is_move = false
             if (this.monkey.node.x >= -100 + this.stick_length) {
+                this.animation.play("Monkey_idle")
                 if (this.check_die()) {
+                    this.animation.play("Monkey_die")
                     this.monkey_die = true
                     // cc.Tween.stopAllByTarget(this.monkey.node);
                     // cc.tween(this.monkey.node).by(2, { y: -400 }).call(() => {
@@ -197,5 +208,6 @@ export default class MainControl extends cc.Component {
         this.stick.node.x = this.Platform[this.plat_number].scaleX * this.Platform[this.plat_number].width / 2 - 120
         this.is_ok = false
         this.monkey_die = false
+        this.animation.play("Monkey_idle")
     }
 }
